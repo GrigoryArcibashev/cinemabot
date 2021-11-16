@@ -38,6 +38,7 @@ public class BotLogic {
 
     private String getResultOfCommandExecution(Token token, Method methodForCommand) {
         try {
+// TODO Можно передавать не token.arguments(), а сам token
             UserId.setIdOfCurrentUser(token.userId());
             return (String) methodForCommand.invoke(commandListener, new Object[]{token.arguments()});
         } catch (IllegalAccessException | InvocationTargetException e) {
