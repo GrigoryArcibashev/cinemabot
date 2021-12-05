@@ -1,6 +1,6 @@
-package botLogic.commands.countryCommand;
+package botLogic.commands;
 
-import botLogic.commands.CommandException;
+import botLogic.exceptions.CommandException;
 import botLogic.userData.UsersData;
 import kinopoiskAPI.API;
 import kinopoiskAPI.Filter;
@@ -16,7 +16,7 @@ public class CountryCommand {
         countriesIdMap = API.getCountriesId();
     }
 
-    public static void setCountry(String[] arguments) throws Exception {
+    public static void setCountry(String[] arguments, String userId) throws Exception {
         if (arguments.length > 0)
             setCountries(arguments);
         else
@@ -29,7 +29,7 @@ public class CountryCommand {
         UsersData.saveSearchResultOfCurrentUser(filter);
     }
 
-    private static int[] getCountriesId(String[] countries) {
+    private static int[] getCountriesId(String[] countries) throws CommandException {
         HashSet<Integer> addingCountries = new HashSet<>();
         for (String country : countries) {
             try {

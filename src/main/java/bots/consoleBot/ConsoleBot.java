@@ -1,6 +1,6 @@
 package bots.consoleBot;
 
-import botLogic.BotLogic;
+import botLogic.CommandHandler;
 import dataIO.consoleInput.ConsoleInput;
 import dataIO.consoleOutput.ConsoleOutput;
 import dataIO.outputModule.OutputModule;
@@ -10,12 +10,12 @@ import tokenizer.Tokenizer;
 public class ConsoleBot {
     private final OutputModule outputModule;
     private final Tokenizer tokenizer;
-    private final BotLogic botLogic;
+    private final CommandHandler commandHandler;
 
     public ConsoleBot() {
         this.outputModule = new ConsoleOutput();
         this.tokenizer = new Tokenizer(new ConsoleInput());
-        this.botLogic = new BotLogic();
+        this.commandHandler = new CommandHandler();
     }
 
     public void start() {
@@ -23,8 +23,7 @@ public class ConsoleBot {
             Token token = null;
             while (token == null)
                 token = tokenizer.getNextToken();
-            String message = botLogic.handle(token);
-            outputModule.sendMessage(message, token.userId());
+            outputModule.sendMessage(commandHandler.handleToken(token), token.userId());
         }
     }
 }

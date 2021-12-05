@@ -6,7 +6,7 @@ public class TokenReader {
     private static final String pathToToken;
 
     static {
-        pathToToken = "src/main/java/kinopoiskAPI/HTTPRequest/TokenReader/token";
+        pathToToken = "src/main/java/kinopoiskAPI/httpRequest/tokenReader/token";
     }
 
     public static String ReadToken() {

@@ -1,10 +1,11 @@
 package botLogic.commands;
 
+import botLogic.exceptions.CommandException;
 import botLogic.userData.UsersData;
 import kinopoiskAPI.Filter;
 
 public class RatingCommand {
-    public static void setRating(String[] arguments) throws Exception {
+    public static void setRating(String[] arguments, String userId) throws Exception {
         switch (arguments.length) {
             case 0 -> resetRatings();
             case 1 -> setRating(arguments[0]);
@@ -37,12 +38,12 @@ public class RatingCommand {
         UsersData.saveSearchResultOfCurrentUser(filter);
     }
 
-    private static void checkCorrectnessOfRatings(Filter filter) {
+    private static void checkCorrectnessOfRatings(Filter filter) throws CommandException {
         if (filter.getRatingFrom() > filter.getRatingTo())
             throw new CommandException("Указанный минимальный рейтинг больше указанного максимального");
     }
 
-    private static int tryParseRatingToInt(String rating) {
+    private static int tryParseRatingToInt(String rating) throws CommandException {
         try {
             int result = Integer.parseInt(rating);
             if (result < 0 || result > 10)

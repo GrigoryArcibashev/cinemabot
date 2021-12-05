@@ -1,6 +1,6 @@
-package botLogic.commands.genreCommand;
+package botLogic.commands;
 
-import botLogic.commands.CommandException;
+import botLogic.exceptions.CommandException;
 import botLogic.userData.UsersData;
 import kinopoiskAPI.API;
 import kinopoiskAPI.Filter;
@@ -16,7 +16,7 @@ public class GenreCommand {
         genresIdMap = API.getGenresId();
     }
 
-    public static void setGenre(String[] arguments) throws Exception {
+    public static void setGenre(String[] arguments, String userId) throws Exception {
         if (arguments.length > 0)
             setGenres(arguments);
         else
@@ -29,7 +29,7 @@ public class GenreCommand {
         UsersData.saveSearchResultOfCurrentUser(filter);
     }
 
-    private static int[] getGenresId(String[] genres) {
+    private static int[] getGenresId(String[] genres) throws CommandException {
         HashSet<Integer> addingGenres = new HashSet<>();
         for (String genre : genres) {
             try {

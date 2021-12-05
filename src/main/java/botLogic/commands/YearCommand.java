@@ -1,10 +1,11 @@
 package botLogic.commands;
 
+import botLogic.exceptions.CommandException;
 import botLogic.userData.UsersData;
 import kinopoiskAPI.Filter;
 
 public class YearCommand {
-    public static void setYear(String[] arguments) throws Exception {
+    public static void setYear(String[] arguments, String userId) throws Exception {
         switch (arguments.length) {
             case 0 -> resetYears();
             case 1 -> setYear(arguments[0]);
@@ -37,12 +38,12 @@ public class YearCommand {
         UsersData.saveSearchResultOfCurrentUser(filter);
     }
 
-    private static void checkCorrectnessOfYears(Filter filter) {
+    private static void checkCorrectnessOfYears(Filter filter) throws CommandException {
         if (filter.getYearFrom() > filter.getYearTo())
             throw new CommandException("Указанный минимальный год больше указанного максимального");
     }
 
-    private static int tryParseYearToInt(String year) {
+    private static int tryParseYearToInt(String year) throws CommandException {
         try {
             int result = Integer.parseInt(year);
             if (result < 0)

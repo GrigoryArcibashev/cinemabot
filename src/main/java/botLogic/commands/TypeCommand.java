@@ -1,10 +1,11 @@
 package botLogic.commands;
 
+import botLogic.exceptions.CommandException;
 import botLogic.userData.UsersData;
 import kinopoiskAPI.Filter;
 
 public class TypeCommand {
-    public static void setType(String[] arguments) throws Exception {
+    public static void setType(String[] arguments, String userId) throws Exception {
         String typeOfMovie = arguments.length == 0 ? "all" : arguments[0];
         setType(typeOfMovie);
     }

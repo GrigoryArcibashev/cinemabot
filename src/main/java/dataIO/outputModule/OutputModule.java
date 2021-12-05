@@ -1,5 +1,5 @@
 package dataIO.outputModule;
 
 public interface OutputModule {
-    void sendMessage(String message, String userId);
+    void sendMessage(Message message, String userId);
 }

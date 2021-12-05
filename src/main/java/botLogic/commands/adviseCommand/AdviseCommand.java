@@ -1,6 +1,6 @@
 package botLogic.commands.adviseCommand;
 
-import botLogic.commands.CommandException;
+import botLogic.exceptions.CommandException;
 import botLogic.commands.adviseCommand.formatter.Formatter;
 import botLogic.userData.UsersData;
 import com.github.cliftonlabs.json_simple.JsonObject;
@@ -9,7 +9,7 @@ import parser.Parser;
 import userParametersRepository.UserParameters;
 
 public class AdviseCommand {
-    public static String advise() throws Exception {
+    public static String advise(String userId) throws Exception {
         UserParameters userParameters = UsersData.getParametersOfCurrentUser();
         if (userParameters == null) {
             registerUser();

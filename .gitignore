@@ -40,7 +40,7 @@ out/
 *.iws
 
 # Token for kinopoiskAPI
-src/kinopoiskAPI/HTTPRequest/TokenReader/token
+src/kinopoiskAPI/httpRequest/tokenReader/token
 
 # JSONdatabase
 src/main/java/userParametersRepository/jsonUserParametersRepository/database.json
