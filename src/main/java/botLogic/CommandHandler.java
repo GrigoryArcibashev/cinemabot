@@ -24,7 +24,7 @@ public class CommandHandler {
         registerCommands();
     }
 
-    public Message handleToken(Token token) {
+    public Message handleCommand(Token token) {
         try {
             //todo потом убрать
             UserId.setIdOfCurrentUser(token.userId());

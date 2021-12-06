@@ -23,7 +23,7 @@ public class ConsoleBot {
             Token token = null;
             while (token == null)
                 token = tokenizer.getNextToken();
-            outputModule.sendMessage(commandHandler.handleToken(token), token.userId());
+            outputModule.sendMessage(commandHandler.handleCommand(token), token.userId());
         }
     }
 }
