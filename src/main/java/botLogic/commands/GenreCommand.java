@@ -1,7 +1,7 @@
 package botLogic.commands;
 
 import botLogic.exceptions.CommandException;
-import botLogic.userData.UsersData;
+import botLogic.Repository;
 import kinopoiskAPI.API;
 import kinopoiskAPI.Filter;
 import parser.Parser;
@@ -18,15 +18,15 @@ public class GenreCommand {
 
     public static void setGenre(String[] arguments, String userId) throws Exception {
         if (arguments.length > 0)
-            setGenres(arguments);
+            setGenres(arguments, userId);
         else
-            resetGenres();
+            resetGenres(userId);
     }
 
-    private static void setGenres(String[] genres) throws Exception {
-        Filter filter = UsersData.getParametersOfCurrentUser().getFilter();
+    private static void setGenres(String[] genres, String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
         filter.setGenresId(getGenresId(genres));
-        UsersData.saveSearchResultOfCurrentUser(filter);
+        Repository.updateSearchResult(filter, userId);
     }
 
     private static int[] getGenresId(String[] genres) throws CommandException {
@@ -41,9 +41,9 @@ public class GenreCommand {
         return Parser.parseArrayToArrayOfInt(addingGenres.toArray(Integer[]::new));
     }
 
-    private static void resetGenres() throws Exception {
-        Filter filter = UsersData.getParametersOfCurrentUser().getFilter();
+    private static void resetGenres(String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
         filter.setGenresId(new int[0]);
-        UsersData.saveSearchResultOfCurrentUser(filter);
+        Repository.updateSearchResult(filter, userId);
     }
 }

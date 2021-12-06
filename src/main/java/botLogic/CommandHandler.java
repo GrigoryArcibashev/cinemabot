@@ -5,7 +5,6 @@ import botLogic.commands.adviseCommand.AdviseCommand;
 import botLogic.exceptions.CommandException;
 import botLogic.exceptions.IllegalCommandArgumentsException;
 import botLogic.exceptions.UnknownCommandException;
-import botLogic.userData.UserId;
 import dataIO.outputModule.Message;
 import tokenizer.Token;
 
@@ -26,8 +25,6 @@ public class CommandHandler {
 
     public Message handleCommand(Token token) {
         try {
-            //todo потом убрать
-            UserId.setIdOfCurrentUser(token.userId());
             checkCommandCall(token.command(), token.arguments());
             return executeCommand(token);
         } catch (CommandException exception) {

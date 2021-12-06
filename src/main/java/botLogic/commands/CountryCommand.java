@@ -1,7 +1,7 @@
 package botLogic.commands;
 
 import botLogic.exceptions.CommandException;
-import botLogic.userData.UsersData;
+import botLogic.Repository;
 import kinopoiskAPI.API;
 import kinopoiskAPI.Filter;
 import parser.Parser;
@@ -18,15 +18,15 @@ public class CountryCommand {
 
     public static void setCountry(String[] arguments, String userId) throws Exception {
         if (arguments.length > 0)
-            setCountries(arguments);
+            setCountries(arguments, userId);
         else
-            resetCountries();
+            resetCountries(userId);
     }
 
-    private static void setCountries(String[] countries) throws Exception {
-        Filter filter = UsersData.getParametersOfCurrentUser().getFilter();
+    private static void setCountries(String[] countries, String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
         filter.setCountriesId(getCountriesId(countries));
-        UsersData.saveSearchResultOfCurrentUser(filter);
+        Repository.updateSearchResult(filter, userId);
     }
 
     private static int[] getCountriesId(String[] countries) throws CommandException {
@@ -41,9 +41,9 @@ public class CountryCommand {
         return Parser.parseArrayToArrayOfInt(addingCountries.toArray(Integer[]::new));
     }
 
-    private static void resetCountries() throws Exception {
-        Filter filter = UsersData.getParametersOfCurrentUser().getFilter();
+    private static void resetCountries(String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
         filter.setCountriesId(new int[0]);
-        UsersData.saveSearchResultOfCurrentUser(filter);
+        Repository.updateSearchResult(filter, userId);
     }
 }

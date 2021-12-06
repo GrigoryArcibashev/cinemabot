@@ -1,41 +1,41 @@
 package botLogic.commands;
 
 import botLogic.exceptions.CommandException;
-import botLogic.userData.UsersData;
+import botLogic.Repository;
 import kinopoiskAPI.Filter;
 
 public class YearCommand {
     public static void setYear(String[] arguments, String userId) throws Exception {
         switch (arguments.length) {
-            case 0 -> resetYears();
-            case 1 -> setYear(arguments[0]);
-            default -> setYears(arguments[0], arguments[1]);
+            case 0 -> resetYears(userId);
+            case 1 -> setYear(arguments[0], userId);
+            default -> setYears(arguments[0], arguments[1], userId);
         }
     }
 
-    private static void resetYears() throws Exception {
-        Filter filter = UsersData.getParametersOfCurrentUser().getFilter();
+    private static void resetYears(String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
         filter.resetYears();
-        UsersData.saveSearchResultOfCurrentUser(filter);
+        Repository.updateSearchResult(filter, userId);
     }
 
-    private static void setYears(String yearFrom, String yearTo) throws Exception {
-        Filter filter = UsersData.getParametersOfCurrentUser().getFilter();
+    private static void setYears(String yearFrom, String yearTo, String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
         filter.setYearFrom(tryParseYearToInt(yearFrom));
         filter.setYearTo(tryParseYearToInt(yearTo));
         checkCorrectnessOfYears(filter);
-        UsersData.saveSearchResultOfCurrentUser(filter);
+        Repository.updateSearchResult(filter, userId);
     }
 
-    private static void setYear(String year) throws Exception {
-        Filter filter = UsersData.getParametersOfCurrentUser().getFilter();
+    private static void setYear(String year, String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
         switch (year.charAt(0)) {
             case '>' -> filter.setYearFrom(tryParseYearToInt(year.substring(1)));
             case '<' -> filter.setYearTo(tryParseYearToInt(year.substring(1)));
             default -> throw new CommandException("Год указан некорректно");
         }
         checkCorrectnessOfYears(filter);
-        UsersData.saveSearchResultOfCurrentUser(filter);
+        Repository.updateSearchResult(filter, userId);
     }
 
     private static void checkCorrectnessOfYears(Filter filter) throws CommandException {

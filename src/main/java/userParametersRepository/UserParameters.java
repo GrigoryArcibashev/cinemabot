@@ -6,7 +6,7 @@ import kinopoiskAPI.API;
 import kinopoiskAPI.Filter;
 import parser.Parser;
 
-public class UserParameters {
+public class  UserParameters {
     // todo хранить не JsonObject а конкретные модельки
     private JsonObject searchResult;
     private Filter filter;

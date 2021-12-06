@@ -1,41 +1,41 @@
 package botLogic.commands;
 
 import botLogic.exceptions.CommandException;
-import botLogic.userData.UsersData;
+import botLogic.Repository;
 import kinopoiskAPI.Filter;
 
 public class RatingCommand {
     public static void setRating(String[] arguments, String userId) throws Exception {
         switch (arguments.length) {
-            case 0 -> resetRatings();
-            case 1 -> setRating(arguments[0]);
-            default -> setRatings(arguments[0], arguments[1]);
+            case 0 -> resetRatings(userId);
+            case 1 -> setRating(arguments[0], userId);
+            default -> setRatings(arguments[0], arguments[1], userId);
         }
     }
 
-    private static void resetRatings() throws Exception {
-        Filter filter = UsersData.getParametersOfCurrentUser().getFilter();
+    private static void resetRatings(String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
         filter.resetRatings();
-        UsersData.saveSearchResultOfCurrentUser(filter);
+        Repository.updateSearchResult(filter, userId);
     }
 
-    private static void setRatings(String ratingFrom, String ratingTo) throws Exception {
-        Filter filter = UsersData.getParametersOfCurrentUser().getFilter();
+    private static void setRatings(String ratingFrom, String ratingTo, String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
         filter.setRatingFrom(tryParseRatingToInt(ratingFrom));
         filter.setRatingTo(tryParseRatingToInt(ratingTo));
         checkCorrectnessOfRatings(filter);
-        UsersData.saveSearchResultOfCurrentUser(filter);
+        Repository.updateSearchResult(filter, userId);
     }
 
-    private static void setRating(String rating) throws Exception {
-        Filter filter = UsersData.getParametersOfCurrentUser().getFilter();
+    private static void setRating(String rating, String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
         switch (rating.charAt(0)) {
             case '>' -> filter.setRatingFrom(tryParseRatingToInt(rating.substring(1)));
             case '<' -> filter.setRatingTo(tryParseRatingToInt(rating.substring(1)));
             default -> throw new CommandException("Рейтинг указан некорректно");
         }
         checkCorrectnessOfRatings(filter);
-        UsersData.saveSearchResultOfCurrentUser(filter);
+        Repository.updateSearchResult(filter, userId);
     }
 
     private static void checkCorrectnessOfRatings(Filter filter) throws CommandException {
