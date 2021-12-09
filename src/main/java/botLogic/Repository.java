@@ -8,6 +8,9 @@ import userParametersRepository.UserParametersRepository;
 public class Repository {
     private static UserParametersRepository userParametersRepository;
 
+    private Repository() {
+    }
+
     public static void initializeRepository(UserParametersRepository userParametersRepository) throws Exception {
         if (Repository.userParametersRepository == null)
             Repository.userParametersRepository = userParametersRepository;
