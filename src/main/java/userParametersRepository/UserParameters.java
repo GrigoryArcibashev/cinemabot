@@ -2,9 +2,12 @@ package userParametersRepository;
 
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
+import com.google.gson.Gson;
 import kinopoiskAPI.API;
 import kinopoiskAPI.Filter;
 import parser.Parser;
+
+import java.util.Collection;
 
 public class  UserParameters {
     // todo хранить не JsonObject а конкретные модельки
@@ -83,9 +86,10 @@ public class  UserParameters {
     }
 
     public JsonObject getCurrentFilm() {
-        JsonArray films = (JsonArray) searchResult.get("films");
+        JsonArray films = new JsonArray((Collection<?>) searchResult.get("films"));
+        var gson = new Gson();
         return !films.isEmpty()
-                ? (JsonObject) (films).get(numberOfCurrentFilm - 1)
+                ? gson.fromJson(gson.toJson(films.get(numberOfCurrentFilm - 1)), JsonObject.class)
                 : null;
     }
 
@@ -108,6 +112,6 @@ public class  UserParameters {
         var films = searchResult.get("films");
         if (films == null)
             return 0;
-        return ((JsonArray) films).size();
+        return (new JsonArray((Collection<?>) films).size());
     }
 }

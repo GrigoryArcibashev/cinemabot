@@ -4,6 +4,7 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import com.google.gson.Gson;
 import kinopoiskAPI.Filter;
+import org.json.JSONObject;
 import userParametersRepository.UserParameters;
 
 import static parser.Parser.parseObjectToInt;

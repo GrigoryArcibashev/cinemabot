@@ -44,3 +44,6 @@ src/kinopoiskAPI/httpRequest/tokenReader/token
 
 # JSONdatabase
 src/main/java/userParametersRepository/jsonUserParametersRepository/database.json
+
+#config.json
+config.json

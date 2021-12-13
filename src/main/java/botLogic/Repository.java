@@ -20,7 +20,7 @@ public class Repository {
         userParametersRepository.saveUserData(userId, userParameters);
     }
 
-    public static UserParameters getUserData(String userId) {
+    public static UserParameters getUserData(String userId) throws Exception {
         check();
         return userParametersRepository.getUserData(userId);
     }
