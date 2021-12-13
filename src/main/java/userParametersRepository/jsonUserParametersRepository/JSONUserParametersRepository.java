@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
-// многие моменты захардкожены, будет больно хранить еще одну таблицу
 public class JSONUserParametersRepository implements UserParametersRepository {
     private final File repository;
     private final JsonObject repositoryData;
@@ -42,9 +41,9 @@ public class JSONUserParametersRepository implements UserParametersRepository {
     @Override
     public UserParameters getUserData(String userId) {
         JsonObject userParametersAsJson = (JsonObject) this.repositoryData.get(userId);
-        if (userParametersAsJson == null)
-            return new UserParameters();
-        return Parser.parseJsonObjectToUserParameters(userParametersAsJson);
+//        if (userParametersAsJson == null)
+//            return new UserParameters();
+        return userParametersAsJson == null ? null : Parser.parseJsonObjectToUserParameters(userParametersAsJson);
     }
 
     private JsonObject downloadRepository() {

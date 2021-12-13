@@ -30,7 +30,7 @@ public class Parser {
                     parseObjectToInt(jsonObject.get("numberOfCurrentFilm")));
         } catch (Exception e) {
             e.printStackTrace();
-            return new UserParameters();
+            return null;//new UserParameters();
         }
     }
 

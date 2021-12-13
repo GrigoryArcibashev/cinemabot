@@ -1,5 +1,6 @@
 package botLogic;
 
+import botLogic.commands.UserRegistrar;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import kinopoiskAPI.Filter;
 import userParametersRepository.UserParameters;
@@ -23,9 +24,15 @@ public class Repository {
         userParametersRepository.saveUserData(userId, userParameters);
     }
 
-    public static UserParameters getUserData(String userId) {
+    public static UserParameters getUserData(String userId) throws Exception {
         check();
-        return userParametersRepository.getUserData(userId);
+        UserParameters userParameters = userParametersRepository.getUserData(userId);
+        if (userParameters == null
+                || userParameters.getSearchResult() == null
+                || userParameters.getFilter() == null) {
+            userParameters = UserRegistrar.registerUser(userId);
+        }
+        return userParameters;
     }
 
     public static void updateSearchResult(Filter filter, String userId) throws Exception {

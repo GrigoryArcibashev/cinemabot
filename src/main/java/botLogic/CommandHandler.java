@@ -19,8 +19,7 @@ public class CommandHandler {
     private final Map<String, Command> commands;
 
     public CommandHandler() {
-        commands = new HashMap<>();
-        registerCommands();
+        commands = registerCommands();
     }
 
     public Message handleCommand(Token token) {
@@ -181,12 +180,14 @@ public class CommandHandler {
                         cmd.maxArgs()));
     }
 
-    private void registerCommands() {
+    private Map<String, Command> registerCommands() {
+        Map<String, Command> commands = new HashMap<>();
         for (Method method : this.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(Command.class)) {
                 Command cmd = method.getAnnotation(Command.class);
                 commands.put(cmd.name(), cmd);
             }
         }
+        return commands;
     }
 }

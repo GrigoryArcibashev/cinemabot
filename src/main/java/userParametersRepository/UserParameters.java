@@ -2,11 +2,10 @@ package userParametersRepository;
 
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
-import kinopoiskAPI.API;
 import kinopoiskAPI.Filter;
 import parser.Parser;
 
-public class  UserParameters {
+public class UserParameters {
     // todo хранить не JsonObject а конкретные модельки
     private JsonObject searchResult;
     private Filter filter;
@@ -15,7 +14,7 @@ public class  UserParameters {
     private int pagesCount;
 
     public UserParameters() {
-        this.searchResult = API.getEmptySearchResult();
+        this.searchResult = null;//API.getEmptySearchResult();
         this.filter = new Filter();
         this.pagesCount = 0;
         this.countOfFilmsOnCurrentPage = getCountOfFilmsOnCurrentPage(searchResult);
@@ -83,6 +82,8 @@ public class  UserParameters {
     }
 
     public JsonObject getCurrentFilm() {
+        if (searchResult == null)
+            return null;
         JsonArray films = (JsonArray) searchResult.get("films");
         return !films.isEmpty()
                 ? (JsonObject) (films).get(numberOfCurrentFilm - 1)
@@ -101,10 +102,12 @@ public class  UserParameters {
     }
 
     private int getPageCount(JsonObject searchResult) {
-        return Parser.parseObjectToInt(searchResult.get("pagesCount"));
+        return searchResult == null ? 0 : Parser.parseObjectToInt(searchResult.get("pagesCount"));
     }
 
     private int getCountOfFilmsOnCurrentPage(JsonObject searchResult) {
+        if (searchResult == null)
+            return 0;
         var films = searchResult.get("films");
         if (films == null)
             return 0;
