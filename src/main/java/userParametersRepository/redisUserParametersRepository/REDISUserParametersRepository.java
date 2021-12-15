@@ -1,35 +1,25 @@
 package userParametersRepository.redisUserParametersRepository;
 
-import com.github.cliftonlabs.json_simple.JsonException;
-import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsoner;
 import com.google.gson.Gson;
 import kinopoiskAPI.Filter;
-import redis.clients.jedis.Jedis;
 import userParametersRepository.UserParameters;
 import userParametersRepository.UserParametersRepository;
+import userParametersRepository.dataBase.DataBase;
+import userParametersRepository.dataBase.RedisDataBase;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class REDISUserParametersRepository implements UserParametersRepository {
-    private final Jedis repository;
-    private String host;
-    private Integer port;
     private final Gson gson;
+    private final DataBase repository;
 
     public REDISUserParametersRepository() {
-        uploadHostAndPort();
-        this.repository = new Jedis(this.host, this.port);
+        this.repository = new RedisDataBase();
         this.gson = new Gson();
     }
 
     @Override
     public void saveUserData(String userId, UserParameters userData) {
-        this.repository.set(userId, gson.toJson(userData));
+        this.repository.Set(userId, gson.toJson(userData));
     }
 
     @Override
@@ -37,12 +27,12 @@ public class REDISUserParametersRepository implements UserParametersRepository {
         String userData = "";
         UserParameters userParameters;
         try {
-            userData = repository.get(userId);
+            userData = this.repository.Get(userId);
         }
         finally {
             if (userData == null){
                 userParameters = new UserParameters();
-                this.repository.set(userId, gson.toJson(userParameters));
+                this.repository.Set(userId, gson.toJson(userParameters));
             }
             else {
                 userParameters = getUserParamFromString(userData);
@@ -71,18 +61,5 @@ public class REDISUserParametersRepository implements UserParametersRepository {
         filter.setYearTo(userParamJson.filter.yearTo);
         filter.setPage(userParamJson.filter.page);
         return filter;
-    }
-
-    private void uploadHostAndPort() {
-        try {
-            String fullPath = "../cinemabot/config.json";
-            Reader reader = Files.newBufferedReader(Paths.get(fullPath));
-            JsonObject parser = (JsonObject) Jsoner.deserialize(reader);
-            host = (String) parser.get("redis-host");
-            port = ((BigDecimal) parser.get("redis-port")).intValueExact();
-        } catch (IOException | JsonException e) {
-            e.printStackTrace();
-            System.exit(3);
-        }
     }
 }
