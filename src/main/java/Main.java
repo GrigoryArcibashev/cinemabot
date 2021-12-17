@@ -1,6 +1,5 @@
 import botLogic.Repository;
 import bots.consoleBot.ConsoleBot;
-import userParametersRepository.jsonUserParametersRepository.JSONUserParametersRepository;
 import userParametersRepository.redisUserParametersRepository.REDISUserParametersRepository;
 
 public class Main {

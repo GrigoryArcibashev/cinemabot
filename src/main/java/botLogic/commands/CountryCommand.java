@@ -29,6 +29,12 @@ public class CountryCommand {
         Repository.updateSearchResult(filter, userId);
     }
 
+    private static void resetCountries(String userId) throws Exception {
+        Filter filter = Repository.getUserData(userId).getFilter();
+        filter.setCountriesId(new int[0]);
+        Repository.updateSearchResult(filter, userId);
+    }
+
     private static int[] getCountriesId(String[] countries) throws CommandException {
         HashSet<Integer> addingCountries = new HashSet<>();
         for (String country : countries) {
@@ -39,11 +45,5 @@ public class CountryCommand {
             }
         }
         return Parser.parseArrayToArrayOfInt(addingCountries.toArray(Integer[]::new));
-    }
-
-    private static void resetCountries(String userId) throws Exception {
-        Filter filter = Repository.getUserData(userId).getFilter();
-        filter.setCountriesId(new int[0]);
-        Repository.updateSearchResult(filter, userId);
     }
 }
