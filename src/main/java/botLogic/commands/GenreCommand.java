@@ -1,7 +1,7 @@
 package botLogic.commands;
 
-import botLogic.exceptions.CommandException;
 import botLogic.Repository;
+import botLogic.exceptions.genreCommandExceptions.UnknownGenreException;
 import kinopoiskAPI.API;
 import kinopoiskAPI.Filter;
 import parser.Parser;
@@ -10,11 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class GenreCommand {
-    private static final Map<String, Integer> genresIdMap;
-
-    static {
-        genresIdMap = API.getGenresId();
-    }
+    private static Map<String, Integer> genresIdMap;
 
     public static void setGenre(String[] arguments, String userId) throws Exception {
         if (arguments.length > 0)
@@ -24,6 +20,8 @@ public class GenreCommand {
     }
 
     private static void setGenres(String[] genres, String userId) throws Exception {
+        if (genresIdMap == null)
+            genresIdMap = API.getGenresId();
         Filter filter = Repository.getUserData(userId).getFilter();
         filter.setGenresId(getGenresId(genres));
         Repository.updateSearchResult(filter, userId);
@@ -35,14 +33,14 @@ public class GenreCommand {
         Repository.updateSearchResult(filter, userId);
     }
 
-    private static int[] getGenresId(String[] genres) throws CommandException {
+    private static int[] getGenresId(String[] genres) throws UnknownGenreException {
         HashSet<Integer> addingGenres = new HashSet<>();
         for (String genre : genres) {
-            try {
-                addingGenres.add(genresIdMap.get(genre));
-            } catch (NullPointerException exception) {
-                throw new CommandException(String.format("Неизвестный жанр: %s", genre));
-            }
+            Integer genreId = genresIdMap.get(genre);
+            if (genreId == null)
+                throw new UnknownGenreException(String.format("Неизвестный жанр: %s", genre));
+            else
+                addingGenres.add(genreId);
         }
         return Parser.parseArrayToArrayOfInt(addingGenres.toArray(Integer[]::new));
     }

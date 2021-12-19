@@ -19,7 +19,7 @@ import userParametersRepository.UserParameters;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RatingCommandTest {
+public class RatingCommandTests {
     private final String userId = "user";
     private MockedStatic<API> mockAPI;
 
@@ -139,19 +139,20 @@ public class RatingCommandTest {
 
     @Test
     public void resetRatingsTest() {
-        Filter expectedFilter = new Filter();
-        mockAPI.when(() -> API.getInformationAboutFilmsByFilter(expectedFilter)).thenReturn(getFakeSearchResult());
+        Filter filter = new Filter();
+        filter.setRatingTo(9);
+        mockAPI.when(() -> API.getInformationAboutFilmsByFilter(filter)).thenReturn(getFakeSearchResult());
         UserParameters actual = null;
         try {
-            Repository.updateSearchResult(expectedFilter, userId);
+            Repository.updateSearchResult(filter, userId);
             RatingCommand.setRating(new String[0], userId);
             actual = Repository.getUserData(userId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             assertNotNull(actual);
-            assertEquals(expectedFilter.getRatingFrom(), actual.getFilter().getRatingFrom());
-            assertEquals(expectedFilter.getRatingTo(), actual.getFilter().getRatingTo());
+            assertEquals(0, actual.getFilter().getRatingFrom());
+            assertEquals(10, actual.getFilter().getRatingTo());
         }
     }
 

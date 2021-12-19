@@ -1,9 +1,7 @@
 package commandTests;
 
 import botLogic.Repository;
-import botLogic.commands.RatingCommand;
 import botLogic.commands.YearCommand;
-import botLogic.exceptions.ratingCommandExceptions.IncorrectRatingException;
 import botLogic.exceptions.yearCommandExceptions.IncorrectYearException;
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
@@ -141,19 +139,20 @@ public class YearCommandTests {
 
     @Test
     public void resetYearsTest() {
-        Filter expectedFilter = new Filter();
-        mockAPI.when(() -> API.getInformationAboutFilmsByFilter(expectedFilter)).thenReturn(getFakeSearchResult());
+        Filter filter = new Filter();
+        filter.setYearTo(2020);
+        mockAPI.when(() -> API.getInformationAboutFilmsByFilter(filter)).thenReturn(getFakeSearchResult());
         UserParameters actual = null;
         try {
-            Repository.updateSearchResult(expectedFilter, userId);
+            Repository.updateSearchResult(filter, userId);
             YearCommand.setYear(new String[0], userId);
             actual = Repository.getUserData(userId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             assertNotNull(actual);
-            assertEquals(expectedFilter.getYearFrom(), actual.getFilter().getYearFrom());
-            assertEquals(expectedFilter.getYearTo(), actual.getFilter().getYearTo());
+            assertEquals(0, actual.getFilter().getYearFrom());
+            assertEquals(Integer.MAX_VALUE, actual.getFilter().getYearTo());
         }
     }
 
