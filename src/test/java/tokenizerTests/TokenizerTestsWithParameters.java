@@ -21,7 +21,7 @@ public class TokenizerTestsWithParameters {
     private static final Tokenizer tokenizer;
 
     static {
-        inputModule = new InputModuleForTests(new ArrayList<>()); // Mock
+        inputModule = new InputModuleForTests(new ArrayList<>());
         tokenizer = new Tokenizer(inputModule);
     }
 

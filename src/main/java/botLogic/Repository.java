@@ -31,6 +31,10 @@ public class Repository {
         saveUserData(userParameters, userId);
     }
 
+    public static boolean isInitialized() {
+        return userParametersRepository != null;
+    }
+
     private static void check() {
         if (userParametersRepository == null)
             throw new NullPointerException(

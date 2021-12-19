@@ -1,7 +1,7 @@
 package botLogic.commands;
 
-import botLogic.exceptions.CommandException;
 import botLogic.Repository;
+import botLogic.exceptions.ratingCommandExceptions.IncorrectRatingException;
 import kinopoiskAPI.Filter;
 
 public class RatingCommand {
@@ -32,25 +32,25 @@ public class RatingCommand {
         switch (rating.charAt(0)) {
             case '>' -> filter.setRatingFrom(tryParseRatingToInt(rating.substring(1)));
             case '<' -> filter.setRatingTo(tryParseRatingToInt(rating.substring(1)));
-            default -> throw new CommandException("Рейтинг указан некорректно");
+            default -> throw new IncorrectRatingException("Рейтинг указан некорректно");
         }
         checkCorrectnessOfRatings(filter);
         Repository.updateSearchResult(filter, userId);
     }
 
-    private static void checkCorrectnessOfRatings(Filter filter) throws CommandException {
+    private static void checkCorrectnessOfRatings(Filter filter) throws IncorrectRatingException {
         if (filter.getRatingFrom() > filter.getRatingTo())
-            throw new CommandException("Указанный минимальный рейтинг больше указанного максимального");
+            throw new IncorrectRatingException("Указанный минимальный рейтинг больше указанного максимального");
     }
 
-    private static int tryParseRatingToInt(String rating) throws CommandException {
+    private static int tryParseRatingToInt(String rating) throws IncorrectRatingException {
         try {
             int result = Integer.parseInt(rating);
             if (result < 0 || result > 10)
-                throw new CommandException("Рейтинг должен находиться в пределах 0-10");
+                throw new IncorrectRatingException("Рейтинг должен находиться в пределах 0-10");
             return result;
         } catch (NumberFormatException exception) {
-            throw new CommandException("Рейтинг должен быть указан числом");
+            throw new IncorrectRatingException("Рейтинг должен быть указан числом");
         }
     }
 }

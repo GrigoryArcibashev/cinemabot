@@ -10,7 +10,6 @@ import parser.Parser;
 import java.util.Collection;
 
 public class  UserParameters {
-    // todo хранить не JsonObject а конкретные модельки
     private JsonObject searchResult;
     private Filter filter;
     private int numberOfCurrentFilm;
