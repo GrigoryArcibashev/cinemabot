@@ -5,15 +5,14 @@ import kinopoiskAPI.Filter;
 import userParametersRepository.UserParameters;
 import userParametersRepository.UserParametersRepository;
 import userParametersRepository.dataBase.DataBase;
-import userParametersRepository.dataBase.RedisDataBase;
 
 
 public class REDISUserParametersRepository implements UserParametersRepository {
     private final Gson gson;
     private final DataBase repository;
 
-    public REDISUserParametersRepository() {
-        this.repository = new RedisDataBase();
+    public REDISUserParametersRepository(DataBase dataBase) {
+        this.repository = dataBase;
         this.gson = new Gson();
     }
 
